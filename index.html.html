@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A simple, clean, and modern Kerala-style fat loss diet plan creator. Calculate calories and generate a 7-day nadan meal plan dynamically.">
+  <title>NadanFit - Kerala Fat Loss Diet Plan Creator</title>
+  
+  <!-- Modern Google Font: Outfit & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="dark-theme">
+  <!-- Interactive Ambient Background Blobs -->
+  <div class="ambient-blobs">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+  <!-- Header -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="logo">
+        <span class="logo-icon">🥗</span>
+        <span class="logo-text">Nadan<span class="logo-highlight">Fit</span></span>
+      </div>
+      <div class="tagline">Kerala-style Fat Loss Diet Creator</div>
+    </div>
+  </header>
+  <!-- Main Container -->
+  <main class="main-container">
+    <!-- Form Section -->
+    <section id="form-section" class="form-container-card animate-slide-up">
+      <div class="card-header">
+        <h2>Personalize Your Diet Plan</h2>
+        <p>Enter your details to calculate your fat loss calories and generate a nadan Kerala meal schedule.</p>
+      </div>
+      <form id="diet-setup-form">
+        <div class="form-grid">
+          <!-- Row 1: Name and Gender -->
+          <div class="form-group">
+            <label for="user-name">Your Name (Optional)</label>
+            <input type="text" id="user-name" placeholder="e.g., Rahul" autocomplete="name">
+          </div>
+          <div class="form-group">
+            <label for="gender">Gender</label>
+            <select id="gender" required>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
+          </div>
+          <!-- Row 2: Age and Weight -->
+          <div class="form-group">
+            <label for="age">Age (Years)</label>
+            <input type="number" id="age" min="15" max="100" value="28" required>
+          </div>
+          <div class="form-group">
+            <label for="weight">Weight (kg)</label>
+            <input type="number" id="weight" min="30" max="250" value="75" step="0.1" required>
+          </div>
+          <!-- Row 3: Height and Activity -->
+          <div class="form-group">
+            <label for="height">Height (cm)</label>
+            <input type="number" id="height" min="100" max="250" value="170" required>
+          </div>
+          <div class="form-group">
+            <label for="activity">Daily Activity Level</label>
+            <select id="activity" required>
+              <option value="sedentary">Sedentary (Little to no exercise, desk job)</option>
+              <option value="light">Lightly Active (Light exercise 1-3 days/week)</option>
+              <option value="moderate" selected>Moderately Active (Moderate exercise 3-5 days/week)</option>
+              <option value="active">Highly Active (Hard exercise 6-7 days/week)</option>
+              <option value="very">Extra Active (Very active job / sports physical training)</option>
+            </select>
+          </div>
+          <!-- Row 4: Food Preference and Speed -->
+          <div class="form-group">
+            <label for="preference">Food Preference</label>
+            <select id="preference" required>
+              <option value="non-veg" selected>Non-Vegetarian (Chicken, Fish, Eggs & Veg)</option>
+              <option value="pescetarian">Pescetarian (Fish, Eggs & Veg, No chicken/meat)</option>
+              <option value="veg">Pure Vegetarian (Vegetarian Kerala meals)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="speed">Fat Loss Goal Speed</label>
+            <select id="speed" required>
+              <option value="slow">Steady / Slow (250 kcal deficit, easy to sustain)</option>
+              <option value="moderate" selected>Moderate (500 kcal deficit, highly recommended)</option>
+              <option value="fast">Fast / Aggressive (750 kcal deficit, strict plan)</option>
+            </select>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-submit" id="btn-submit">
+          <span>Generate Diet Plan</span>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="btn-icon"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </button>
+      </form>
+    </section>
+    <!-- Results Section (Hidden initially) -->
+    <section id="results-section" class="results-container hidden">
+      
+      <!-- Stats Dashboard -->
+      <div class="stats-dashboard-card animate-slide-up">
+        <div class="dashboard-header">
+          <div class="dashboard-title-group">
+            <span class="status-indicator"></span>
+            <h2>Your Personal Calorie Targets</h2>
+          </div>
+          <div class="calorie-badge" id="target-calories">-- kcal / day</div>
+        </div>
+        <!-- Progress bar visualization -->
+        <div class="gauge-container">
+          <div class="gauge-label-row">
+            <span>BMR: <strong id="bmr-val">--</strong></span>
+            <span>TDEE: <strong id="tdee-val">--</strong></span>
+            <span>Target Deficit: <strong id="deficit-val">--</strong></span>
+          </div>
+          <div class="calorie-gauge-outer">
+            <div class="calorie-gauge-inner" id="calorie-gauge-fill"></div>
+          </div>
+          <p class="gauge-caption">Your budget is carefully calculated below your TDEE to induce a consistent fat-burning state.</p>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <span class="stat-icon">💧</span>
+            <div class="stat-info">
+              <span class="stat-title">Water Target</span>
+              <span class="stat-value" id="water-val">--</span>
+            </div>
+          </div>
+          
+          <div class="stat-card">
+            <span class="stat-icon">⚖️</span>
+            <div class="stat-info">
+              <span class="stat-title">Calculated BMI</span>
+              <span class="stat-value" id="bmi-val">--</span>
+            </div>
+            <span class="bmi-badge" id="bmi-status">--</span>
+          </div>
+        </div>
+      </div>
+      <!-- Weekly Schedule Layout -->
+      <div class="weekly-layout-grid">
+        <!-- Main Planner Column -->
+        <div class="planner-column animate-slide-up delay-1">
+          <div class="planner-header-card">
+            <div class="tabs-scroll-container">
+              <div class="day-tabs" id="day-tabs">
+                <!-- Day buttons generated via JS -->
+              </div>
+            </div>
+          </div>
+          <!-- Active Day Details -->
+          <div id="day-plan-details">
+            <!-- Rendered via JS -->
+          </div>
+        </div>
+        <!-- Sidebar List Column -->
+        <div class="sidebar-column animate-slide-up delay-2">
+          <!-- Shopping List -->
+          <div class="sidebar-card shopping-list-card">
+            <div class="card-header">
+              <h3>🛒 Shopping & Pantry List</h3>
+              <p>Tick off items to prepare for the week.</p>
+            </div>
+            
+            <div class="shopping-tabs">
+              <button class="shop-tab-btn active" id="shop-tab-fresh">Fresh Items</button>
+              <button class="shop-tab-btn" id="shop-tab-pantry">Pantry & Spices</button>
+            </div>
+            <div class="shop-content-wrapper">
+              <!-- Fresh Items List -->
+              <div id="shop-fresh-section">
+                <ul class="shopping-list" id="shopping-list-items">
+                  <!-- Rendered via JS -->
+                </ul>
+              </div>
+              <!-- Pantry Essentials List -->
+              <div id="shop-pantry-section" class="hidden">
+                <ul class="shopping-list pantry-list">
+                  <li>
+                    <label class="shop-checkbox-container">
+                      <input type="checkbox">
+                      <span class="checkmark"></span>
+                      <span class="shop-item-name">Coconut Oil (for tempering & cooking)</span>
+                    </label>
+                  </li>
+                  <li>
+                    <label class="shop-checkbox-container">
+                      <input type="checkbox">
+                      <span class="checkmark"></span>
+                      <span class="shop-item-name">Mustard Seeds & Curry Leaves</span>
+                    </label>
+                  </li>
+                  <li>
+                    <label class="shop-checkbox-container">
+                      <input type="checkbox">
+                      <span class="checkmark"></span>
+                      <span class="shop-item-name">Turmeric & Red Chili Powder</span>
+                    </label>
+                  </li>
+                  <li>
+                    <label class="shop-checkbox-container">
+                      <input type="checkbox">
+                      <span class="checkmark"></span>
+                      <span class="shop-item-name">Kudampuli (Malabar Tamarind)</span>
+                    </label>
+                  </li>
+                  <li>
+                    <label class="shop-checkbox-container">
+                      <input type="checkbox">
+                      <span class="checkmark"></span>
+                      <span class="shop-item-name">Black Pepper & Garam Masala</span>
+                    </label>
+                  </li>
+                  <li>
+                    <label class="shop-checkbox-container">
+                      <input type="checkbox">
+                      <span class="checkmark"></span>
+                      <span class="shop-item-name">Ginger, Garlic & Shallots (Chuvannulli)</span>
+                    </label>
+                  </li>
+                  <li>
+                    <label class="shop-checkbox-container">
+                      <input type="checkbox">
+                      <span class="checkmark"></span>
+                      <span class="shop-item-name">Salt (preferably Rock Salt/Kalluppu)</span>
+                    </label>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <button id="btn-copy-shopping" class="btn btn-secondary btn-sm" style="margin-top: 1.5rem; padding: 0.6rem 1rem; font-size: 0.9rem;">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="btn-icon"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span>Copy List to Clipboard</span>
+            </button>
+          </div>
+          <!-- Controls / Operations -->
+          <div class="sidebar-card controls-card">
+            <h3>Plan Controls</h3>
+            <p>Customize, export, or adjust details easily.</p>
+            <div class="controls-btn-stack">
+              <button id="btn-regenerate" class="btn btn-secondary">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="btn-icon"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+                <span>Regenerate Mix</span>
+              </button>
+              
+              <button id="btn-modify" class="btn btn-secondary">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="btn-icon"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                <span>Change Profile</span>
+              </button>
+              <button id="btn-print" class="btn btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="btn-icon"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                <span>Print Plan / PDF</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <!-- Footer -->
+  <footer class="app-footer">
+    <p>&copy; 2026 NadanFit. Developed for client-side execution. Your inputs and generated data remain secure on this browser.</p>
+  </footer>
+  <!-- Main Logic Script -->
+  <script src="script.js"></script>
+</body>
+</html>
